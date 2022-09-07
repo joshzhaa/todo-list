@@ -20,18 +20,19 @@ void test_colors(std::ostream& out) {
 }
 #endif
 
+std::ostream& operator<< (std::ostream& out, const std::chrono::year_month_day& date) {
+    return out << int(date.year()) << '/' << unsigned(date.month()) << '/' << unsigned(date.day());
+}
+
 int main() {
 #ifdef DEBUG
     test_colors(std::cout);
 #endif
     std::chrono::day d(7);
-    std::chrono::day next = d++;
-    //std::cout << d << '\n';
     std::chrono::month m(9);
     std::cout << unsigned(m) << '\n';
     std::chrono::year y(2022);
-    //std::cout << y << '\n';
     std::chrono::year_month_day date(y, m, d);
-    //std::cout << date << '\n';
+    std::cout << date << '\n';
     return 0;
 }
