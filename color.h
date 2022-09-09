@@ -1,3 +1,6 @@
+#ifndef __COLOR_H__
+#define __COLOR_H__
+
 //reset colors
 #define RESET   "\033[0m"
 //foreground colors, i think black would be useless lol
@@ -15,3 +18,4 @@
 #define BACK_MAGENTA "\033[45m"
 #define BACK_CYAN    "\033[46m"
 
+#endif //__COLOR_H__
