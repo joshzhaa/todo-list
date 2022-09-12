@@ -27,6 +27,12 @@ void test_colors(std::ostream& out) {
     out << BACK_CYAN    "CYAN background"    RESET "\n";
 }
 #endif
+//workaround for lack of c++20 text formatting support
+void pad(std::string& target, size_t width) {
+    while (target.size() < width) {
+        target.push_back(' ');
+    }
+}
 //insertion operator overload that prints date in YYYY/MM/DD format
 std::ostream& operator<< (std::ostream& out, const std::chrono::year_month_day& date) {
     return out << std::setw(4) << std::setfill('0') << int(date.year()) << '/' <<
@@ -48,7 +54,7 @@ size_t read_list(std::istream& in, std::vector<Task>& tasks) {
         std::getline(in, description);
         tasks.push_back(Task{std::chrono::year_month_day(std::chrono::year(year), std::chrono::month(month),
             std::chrono::day(day)), description});
-        if (description.size() > longest_description) longest_description = 0;
+        if (description.size() > longest_description) longest_description = description.size();
     }
     return longest_description;
 }
@@ -60,7 +66,9 @@ void print_list(std::ostream& out, std::vector<Task>& tasks, size_t description_
     //advance iterator to upper bound, printing each step
     auto print_block = [&](const sys_days& upper_bound, const char* color) {
         while (task != tasks.end() && task->date < upper_bound) {
-            out << color << year_month_day{task->date} << std::setw(description_width) << task->description << RESET "\n";
+            std::string& description = task->description;
+            pad(description, description_width);
+            out << color << year_month_day{task->date} << description << RESET "\n";
             ++task;
         }
     };
@@ -87,7 +95,7 @@ int main() {
     std::sort(tasks.begin(), tasks.end(), [](const Task& left, const Task& right) {
         return left.date < right.date;
     });
-    print_list(std::cout, tasks, description_width);
+    print_list(std::cout, tasks, description_width + 5);
     file.close();
     return 0;
 }
