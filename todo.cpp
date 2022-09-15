@@ -80,10 +80,15 @@ void print_list(std::ostream& out, std::vector<Task>& tasks, size_t description_
     //auto today = year_month_day{year{tm->tm_year + 1900}, month(tm->tm_mon + 1), day(tm->tm_mday)};
     auto const now = system_clock::now();
     sys_days today = floor<days>(now);
+    out << FORE_CYAN   "The Past"          RESET "\n";
     print_block(today, BACK_RED); //print overdue tasks
+    out << FORE_CYAN   "Right now (this week)"          RESET "\n";
     print_block(today += days{7}, BACK_MAGENTA); //print one week
+    out << FORE_CYAN   "Near future (within 3 weeks)"   RESET "\n";
     print_block(today += days{14}, BACK_BLUE); //print another 2 weeks
-    print_block(today += days{365}, BACK_CYAN);
+    out << FORE_CYAN   "Far future (within 5 weeks)"   RESET "\n";
+    print_block(today += days{14}, BACK_YELLOW); //print another 2 weeks
+    print_block(today += days{365}, RESET);
 }
 int main() {
 #ifdef DEBUG
